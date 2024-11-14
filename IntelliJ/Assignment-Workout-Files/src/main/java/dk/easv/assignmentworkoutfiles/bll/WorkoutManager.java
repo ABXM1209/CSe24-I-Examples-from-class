@@ -1,5 +1,6 @@
 package dk.easv.assignmentworkoutfiles.bll;
 
+import dk.easv.assignmentworkoutfiles.WorkoutApp;
 import dk.easv.assignmentworkoutfiles.be.Routine;
 import dk.easv.assignmentworkoutfiles.be.User;
 import dk.easv.assignmentworkoutfiles.be.UserWorkout;
@@ -17,7 +18,7 @@ public class WorkoutManager {
     private final RoutineDAO routineDAO = new RoutineDAO();
 
     // Add a new user
-    public User addUser(User user) throws IOException {
+    public User addUser(User user) throws WorkoutException {
         if (sanityCheckUserName(user.getUsername())) {
             return userDAO.add(user);
         }
@@ -25,20 +26,24 @@ public class WorkoutManager {
     }
 
     // Update an existing user
-    public void updateUser(User updatedUser) throws IOException {
+    public void updateUser(User updatedUser) throws WorkoutException {
         if (sanityCheckUserName(updatedUser.getUsername())) {
             userDAO.update(updatedUser);
         }
     }
 
     // Get all users
-    public List<User> getUsers() throws IOException {
-        return userDAO.getAll();
+    public List<User> getUsers() throws WorkoutException {
+        try {
+            return userDAO.getAll();
+        } catch (IOException e) {
+            throw new WorkoutException(e);
+        }
     }
 
     // Delete a user
-    public void deleteUser(User user) throws IOException {
-        userDAO.delete(user);
+    public void deleteUser(User user) throws WorkoutException {
+            userDAO.delete(user);
     }
 
     // Sanity check, just an example of some logic
@@ -55,7 +60,7 @@ public class WorkoutManager {
         return true;
     }
 
-    public List<UserWorkout> getUserWorkouts(User u) throws IOException {
+    public List<UserWorkout> getUserWorkouts(User u) throws WorkoutException {
         return userWorkoutDAO.getUserWorkouts(u);
     }
 
@@ -63,11 +68,11 @@ public class WorkoutManager {
         return routineDAO.getAll();
     }
 
-    public Routine addRoutine(Routine routine) throws IOException {
+    public Routine addRoutine(Routine routine) throws WorkoutException {
         return routineDAO.add(routine);
     }
 
-    public void deleteRoutine(Routine routine) throws IOException {
+    public void deleteRoutine(Routine routine) throws WorkoutException {
         routineDAO.delete(routine);
     }
 }

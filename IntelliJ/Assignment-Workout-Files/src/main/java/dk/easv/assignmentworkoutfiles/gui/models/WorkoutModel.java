@@ -17,7 +17,7 @@ public class WorkoutModel {
     private final ObservableList<UserWorkout> userWorkouts = FXCollections.observableArrayList();
     private final ObservableList<Routine> routines = FXCollections.observableArrayList();
 
-    public void loadRoutines() throws WorkoutException {
+    public void loadRoutines(User u) throws WorkoutException {
         routines.setAll(workoutManager.getRoutines());
     }
 

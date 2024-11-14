@@ -38,7 +38,7 @@ public class WorkoutAppController implements Initializable {
 
     public void onLoadRoutinesClick(ActionEvent actionEvent) {
         try {
-            workoutModel.loadRoutines();
+            workoutModel.loadRoutines(user);
         } catch (WorkoutException e) {
             showAlertWindow(e);
         }

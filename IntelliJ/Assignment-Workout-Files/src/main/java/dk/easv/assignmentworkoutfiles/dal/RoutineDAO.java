@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.spi.DateFormatProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,6 +46,9 @@ public class RoutineDAO {
                     Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid line format: " + line);
                 }
             }
+        }
+        else{
+            throw new WorkoutException("Routine file not found: " + filePath);
         }
         return routines;
     }

@@ -1,19 +1,20 @@
 package dk.easv.assignmentworkoutfiles.bll;
 
-import dk.easv.assignmentworkoutfiles.WorkoutApp;
 import dk.easv.assignmentworkoutfiles.be.Routine;
 import dk.easv.assignmentworkoutfiles.be.User;
 import dk.easv.assignmentworkoutfiles.be.UserWorkout;
+import dk.easv.assignmentworkoutfiles.dal.IUserDAO;
 import dk.easv.assignmentworkoutfiles.dal.RoutineDAO;
 import dk.easv.assignmentworkoutfiles.dal.UserDAO;
 import dk.easv.assignmentworkoutfiles.dal.UserWorkoutDAO;
+import dk.easv.assignmentworkoutfiles.dal.db.UserDAODB;
+import dk.easv.assignmentworkoutfiles.dal.web.UserDAOWEB;
 import dk.easv.assignmentworkoutfiles.exceptions.WorkoutException;
 
-import java.io.IOException;
 import java.util.List;
 
 public class WorkoutManager {
-    private final UserDAO userDAO = new UserDAO();
+    private final IUserDAO userDAO = new UserDAO();
     private final UserWorkoutDAO userWorkoutDAO = new UserWorkoutDAO();
     private final RoutineDAO routineDAO = new RoutineDAO();
 
@@ -34,16 +35,12 @@ public class WorkoutManager {
 
     // Get all users
     public List<User> getUsers() throws WorkoutException {
-        try {
-            return userDAO.getAll();
-        } catch (IOException e) {
-            throw new WorkoutException(e);
-        }
+        return userDAO.getAll();
     }
 
     // Delete a user
     public void deleteUser(User user) throws WorkoutException {
-            userDAO.delete(user);
+        userDAO.delete(user);
     }
 
     // Sanity check, just an example of some logic

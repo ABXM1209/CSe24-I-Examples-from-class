@@ -9,10 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -27,18 +25,11 @@ public class WorkoutAppController implements Initializable {
     @FXML
     private ListView<UserWorkout> lstUserWorkouts;
 
-    @FXML
-    private User user;
-
     private final WorkoutModel workoutModel = new WorkoutModel();
-
+    private User user;
     public void onLoadUsersClick(ActionEvent actionEvent) {
         try {
-            try {
-                workoutModel.loadUsers();
-            } catch (WorkoutException e) {
-                throw new WorkoutException(e);
-            }
+            workoutModel.loadUsers();
         } catch (WorkoutException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
@@ -53,11 +44,11 @@ public class WorkoutAppController implements Initializable {
         }
     }
 
-    public void onLoadUserWorkoutsClick(ActionEvent actionEvent) throws WorkoutException {
+    public void onLoadUserWorkoutsClick(ActionEvent actionEvent) {
         try {
             workoutModel.loadUserWorkouts(user);
         } catch (WorkoutException e) {
-            throw new WorkoutException(e);
+            showAlertWindow(e);
         }
     }
 
@@ -68,11 +59,7 @@ public class WorkoutAppController implements Initializable {
         lstRoutines.setItems(workoutModel.getRoutines());
         lstUsers.getSelectionModel().selectedItemProperty().addListener((prop, old, current)->{
             try {
-                try {
-                    workoutModel.loadUserWorkouts(current);
-                } catch (WorkoutException e) {
-                    throw new WorkoutException(e);
-                }
+                workoutModel.loadUserWorkouts(current);
             } catch (WorkoutException e) {
                 showAlertWindow(e);
             }
@@ -162,6 +149,7 @@ public class WorkoutAppController implements Initializable {
                     ));
             lstRoutines.getItems().add(routine);
         } catch (WorkoutException e) {
+            showAlertWindow(e);
         }
 
     }
@@ -172,6 +160,7 @@ public class WorkoutAppController implements Initializable {
         try {
             workoutModel.deleteRoutine(selected);
         } catch (WorkoutException e) {
+            showAlertWindow(e);
         }
         lstRoutines.getItems().remove(selected);
     }

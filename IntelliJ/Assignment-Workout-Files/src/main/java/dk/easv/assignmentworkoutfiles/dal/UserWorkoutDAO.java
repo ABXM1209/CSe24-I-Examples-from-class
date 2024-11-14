@@ -63,12 +63,16 @@ public class UserWorkoutDAO {
         return userWorkout.getId() + splitChar + userWorkout.getUser().getId() + splitChar + userWorkout.getRoutine().getId() + splitChar + userWorkout.getDate();
     }
 
-    public void clearAndSave(List<UserWorkout> userWorkouts) throws IOException {
+    public void clearAndSave(List<UserWorkout> userWorkouts) throws WorkoutException {
         List<String> lines = new ArrayList<>();
         for (UserWorkout userWorkout : userWorkouts) {
             lines.add(getAsCSVString(userWorkout));
         }
-        Files.write(filePath, lines); // Overwrites the file
+        try {
+            Files.write(filePath, lines); // Overwrites the file
+        } catch (IOException e) {
+            throw new WorkoutException(e);
+        }
     }
 
     public UserWorkout add(UserWorkout userWorkout) throws WorkoutException {
@@ -84,11 +88,7 @@ public class UserWorkoutDAO {
     public void delete(UserWorkout userWorkout) throws WorkoutException {
         List<UserWorkout> userWorkouts = getAll();
         userWorkouts.removeIf(u -> u.getId() == userWorkout.getId());
-        try {
-            clearAndSave(userWorkouts);
-        } catch (IOException e) {
-            throw new WorkoutException(e);
-        }
+        clearAndSave(userWorkouts);
     }
 
     public void update(UserWorkout userWorkout) throws WorkoutException {
@@ -104,11 +104,7 @@ public class UserWorkoutDAO {
         if (!userFound) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, userWorkout.getId() + " not found for update.");
         }
-        try {
-            clearAndSave(userWorkouts); // Save the updated list
-        } catch (IOException e) {
-            throw new WorkoutException(e);
-        }
+        clearAndSave(userWorkouts); // Save the updated list
     }
 
     // Get the next available user ID
